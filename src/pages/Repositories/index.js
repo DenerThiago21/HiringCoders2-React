@@ -1,22 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory, Link } from 'react-router';
 import * as S from './styled';
 
 function Repositories() {
+    const history = useHistory();
+    const [ repositories, setRepositories ] = useState([]);
+
+    useEffect(() => {
+        let repositoriesName = localStorage.getItem('repositoriesName');
+        if(repositoriesName !== null) {
+            repositoriesName = JSON.parse(repositoriesName);
+            setRepositories(repositoriesName);
+            localStorage.clear();
+        } else {
+            history.push('/');
+        }
+    }, []);
+
     return (
         <S.Container>
             <S.Title>Repositories</S.Title>
             <S.List>
-                <S.ListItem>Repositório: nome do Repo1</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo2</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo3</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo4</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo5</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo6</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo7</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo8</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo9</S.ListItem>
-                <S.ListItem>Repositório: nome do Repo10</S.ListItem>
+                {
+                    repositories.map(repository => {
+                        return (
+                            <S.ListItem>Repositório: { repository }</S.ListItem>
+                        );
+                    })
+                }
             </S.List>
+            <S.LinkHome to="/">Voltar</S.LinkHome>
         </S.Container>
         
     );
